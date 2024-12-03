@@ -319,20 +319,15 @@ def main():
         print(f"Generated image saved at: {image_paths[0]}")
         img_path = image_paths[0]
         with open(img_path, "rb") as image_file:
-            img_data = image_file.read()
-        
-        # Encode the image data to base64
-        img_base64 = base64.b64encode(img_data).decode("utf-8")
-        
-        # Save the base64-encoded image to S3
+        # Save the image to S3
         s3_client = boto3.client('s3')
         bucket_name = os.environ.get('IMAGE_BUCKET', 'my-stable-diffusion-images')
-        s3_key = f"images/{os.path.basename(img_path)}.b64"
+        s3_key = f"images/{os.path.basename(img_path)}"
         
         s3_client.put_object(
             Bucket=bucket_name,
             Key=s3_key,
-            Body=img_base64
+            Body=image_file
         )
         
         s3_url = f"https://{bucket_name}.s3.amazonaws.com/{s3_key}"
