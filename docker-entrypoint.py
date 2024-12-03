@@ -312,12 +312,16 @@ def main():
     pipeline = stable_diffusion_pipeline(args)
     image_paths = stable_diffusion_inference(pipeline)
     if image_paths:
-        print(f"Generated image saved at: {image_paths[0]}")
         img_path = image_paths[0]
         with open(img_path, "rb") as image_file:
             img_base64 = base64.b64encode(image_file.read()).decode("utf-8")
-        print(f"Generated image as base64: {img_base64}")
-        return img_base64
+        
+        # Split the base64 string into smaller chunks
+        chunk_size = 1000  # Adjust the chunk size as needed
+        img_base64_chunks = [img_base64[i:i + chunk_size] for i in range(0, len(img_base64), chunk_size)]
+        
+        print(f"Generated image as base64 chunks: {img_base64_chunks}")
+        return img_base64_chunks
     return None
 
 
