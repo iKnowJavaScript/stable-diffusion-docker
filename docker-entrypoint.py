@@ -8,6 +8,7 @@ import warnings
 from dotenv import load_dotenv
 
 import base64
+import boto3
 from io import BytesIO
 
 import numpy as np
