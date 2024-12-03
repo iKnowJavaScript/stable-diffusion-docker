@@ -332,8 +332,7 @@ def main():
         s3_client.put_object(
             Bucket=bucket_name,
             Key=s3_key,
-            Body=img_base64,
-            ACL='public-read'
+            Body=img_base64
         )
         
         s3_url = f"https://{bucket_name}.s3.amazonaws.com/{s3_key}"
