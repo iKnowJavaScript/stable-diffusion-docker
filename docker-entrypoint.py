@@ -5,6 +5,7 @@ import inspect
 import os
 import re
 import warnings
+from dotenv import load_dotenv
 
 import base64
 from io import BytesIO
@@ -23,6 +24,8 @@ from diffusers import (
     schedulers,
 )
 
+# Load environment variables from .env file
+load_dotenv()
 
 def iso_date_time():
     return datetime.datetime.now().isoformat()
