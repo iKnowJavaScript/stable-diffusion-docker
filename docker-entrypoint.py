@@ -312,18 +312,30 @@ def main():
     pipeline = stable_diffusion_pipeline(args)
     image_paths = stable_diffusion_inference(pipeline)
     if image_paths:
+        print(f"Generated image saved at: {image_paths[0]}")
         img_path = image_paths[0]
         with open(img_path, "rb") as image_file:
-            img_base64 = base64.b64encode(image_file.read()).decode("utf-8")
+            img_data = image_file.read()
         
-        # Split the base64 string into smaller chunks
-        chunk_size = 1000  # Adjust the chunk size as needed
-        img_base64_chunks = [img_base64[i:i + chunk_size] for i in range(0, len(img_base64), chunk_size)]
+        # Encode the image data to base64
+        img_base64 = base64.b64encode(img_data).decode("utf-8")
         
-        print(f"Generated image as base64 chunks: {img_base64_chunks}")
-        return img_base64_chunks
+        # Save the base64-encoded image to S3
+        s3_client = boto3.client('s3')
+        bucket_name = os.environ['IMAGE_BUCKET']
+        s3_key = f"images/{os.path.basename(img_path)}.b64"
+        
+        s3_client.put_object(
+            Bucket=bucket_name,
+            Key=s3_key,
+            Body=img_base64,
+            ACL='public-read'
+        )
+        
+        s3_url = f"https://{bucket_name}.s3.amazonaws.com/{s3_key}"
+        print(f"Generated image saved to S3 with URL: {s3_url}")
+        return s3_url
     return None
-
 
 if __name__ == "__main__":
     main()
