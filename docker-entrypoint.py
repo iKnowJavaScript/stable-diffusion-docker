@@ -326,7 +326,7 @@ def main():
         
         # Save the base64-encoded image to S3
         s3_client = boto3.client('s3')
-        bucket_name = os.environ['IMAGE_BUCKET']
+        bucket_name = os.environ.get('IMAGE_BUCKET', 'my-stable-diffusion-images')
         s3_key = f"images/{os.path.basename(img_path)}.b64"
         
         s3_client.put_object(
