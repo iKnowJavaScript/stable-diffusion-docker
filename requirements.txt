@@ -4,3 +4,4 @@ safetensors==0.4.1
 torch==2.1.0+cu118
 transformers==4.35.2
 xformers==0.0.22.post7
+huggingface_hub==0.23.0
