@@ -319,16 +319,16 @@ def main():
         print(f"Generated image saved at: {image_paths[0]}")
         img_path = image_paths[0]
         with open(img_path, "rb") as image_file:
-        # Save the image to S3
-        s3_client = boto3.client('s3')
-        bucket_name = os.environ.get('IMAGE_BUCKET', 'my-stable-diffusion-images')
-        s3_key = f"images/{os.path.basename(img_path)}"
-        
-        s3_client.put_object(
-            Bucket=bucket_name,
-            Key=s3_key,
-            Body=image_file
-        )
+            # Save the image to S3
+            s3_client = boto3.client('s3')
+            bucket_name = os.environ.get('IMAGE_BUCKET', 'my-stable-diffusion-images')
+            s3_key = f"images/{os.path.basename(img_path)}"
+            
+            s3_client.put_object(
+                Bucket=bucket_name,
+                Key=s3_key,
+                Body=image_file
+            )
         
         s3_url = f"https://{bucket_name}.s3.amazonaws.com/{s3_key}"
         print(f"Generated image saved to S3 with URL: {s3_url}")
