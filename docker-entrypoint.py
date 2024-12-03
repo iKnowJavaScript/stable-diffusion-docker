@@ -313,15 +313,6 @@ def main():
     image_paths = stable_diffusion_inference(pipeline)
     if image_paths:
         print(f"Generated image saved at: {image_paths[0]}")
-        return image_paths[0]
-    return None
-
-def main():
-    args = parse_args()
-    pipeline = stable_diffusion_pipeline(args)
-    image_paths = stable_diffusion_inference(pipeline)
-    if image_paths:
-        print(f"Generated image saved at: {image_paths[0]}")
         img_path = image_paths[0]
         with open(img_path, "rb") as image_file:
             img_base64 = base64.b64encode(image_file.read()).decode("utf-8")
