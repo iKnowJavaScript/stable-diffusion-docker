@@ -145,15 +145,21 @@ def stable_diffusion_inference(p):
         .encode("utf-8")[:170]
         .decode("utf-8", "ignore")
     )
+    image_paths = []
     for j in range(p.iters):
         result = p.pipeline(**remove_unused_args(p))
 
         for i, img in enumerate(result.images):
             idx = j * p.samples + i + 1
             out = f"{prefix}__steps_{p.steps}__scale_{p.scale:.2f}__seed_{p.seed}__n_{idx}.png"
-            img.save(os.path.join("output", out))
+            # img.save(os.path.join("output", out))
+            img_path = os.path.join("output", out)
+            img.save(img_path)
+            image_paths.append(img_path)
+            print(f"Saved image: {img_path}", flush=True)
 
     print("completed pipeline:", iso_date_time(), flush=True)
+    return image_paths
 
 
 def parse_args():
@@ -301,7 +307,12 @@ def parse_args():
 def main():
     args = parse_args()
     pipeline = stable_diffusion_pipeline(args)
-    stable_diffusion_inference(pipeline)
+    # stable_diffusion_inference(pipeline)
+    image_paths = stable_diffusion_inference(pipeline)
+    if image_paths:
+        print(f"Generated image saved at: {image_paths[0]}")
+        return image_paths[0]
+    return None
 
 
 if __name__ == "__main__":
